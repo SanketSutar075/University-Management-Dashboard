@@ -1,0 +1,565 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Schema Alignment & Standardization Report</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; margin: 20px;
+               background-color: #f8f9fa; color: #343a40; line-height: 1.6; }
+        h1 { color: #007bff; text-align: center; margin-bottom: 30px;
+             border-bottom: 2px solid #007bff; padding-bottom: 10px; }
+        h2 { color: #28a745; border-bottom: 1px solid #28a745; padding-bottom: 5px; }
+        h3 { color: #17a2b8; margin-top: 25px; }
+        h4 { color: #6c757d; margin-top: 15px; }
+        pre { background-color: #e9ecef; padding: 10px; border-radius: 8px;
+              font-size: 0.9em; border: 1px solid #ced4da; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px;
+                box-shadow: 0 2px 3px rgba(0,0,0,0.1); }
+        th, td { border: 1px solid #dee2e6; padding: 10px; text-align: left; }
+        th { background-color: #007bff; color: white; }
+        tr:nth-child(even) { background-color: #f2f2f2; }
+        .summary-box { background-color: #e0f7fa; border: 1px solid #00bcd4;
+                       padding: 20px; border-radius: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Schema Alignment & Standardization Report</h1>
+    <div class="summary-box">
+        <h2>Report Summary</h2>
+        <p>This report documents all transformations applied to the dataset in Step 4:</p>
+        <ul>
+            <li>Snake_case column normalization</li>
+            <li>Date standardization to YYYY-MM-DD</li>
+            <li>Gender recoding (M/F → Male/Female)</li>
+            <li>Grade standardization</li>
+            <li>Reference integrity validation</li>
+        </ul>
+    </div>
+<h2>Verification of Standardized DataFrames</h2><h3>DataFrame: students</h3><h4>Head:</h4><table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>student_id</th>
+      <th>name</th>
+      <th>dob</th>
+      <th>gender</th>
+      <th>email</th>
+      <th>phone</th>
+      <th>enrollment_year</th>
+      <th>department_id</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>S10000</td>
+      <td>Michelle Lamb</td>
+      <td>2004-09-13</td>
+      <td>Other</td>
+      <td>egreen@morgan.com</td>
+      <td>265.233.5210x4181</td>
+      <td>2018</td>
+      <td>D18</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>S10001</td>
+      <td>Julie Hicks</td>
+      <td>1996-03-14</td>
+      <td>Male</td>
+      <td>wyoung@cobb-murphy.biz</td>
+      <td>001-192-564-6990x039</td>
+      <td>2020</td>
+      <td>D3</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>S10002</td>
+      <td>Stanley Swanson</td>
+      <td>2004-05-13</td>
+      <td>Male</td>
+      <td>zduran@gmail.com</td>
+      <td>+1-956-544-0123x23423</td>
+      <td>2018</td>
+      <td>D3</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>S10003</td>
+      <td>Melanie Gay</td>
+      <td>2005-09-18</td>
+      <td>Other</td>
+      <td>danacolon@jones.com</td>
+      <td>5428064334</td>
+      <td>2020</td>
+      <td>D8</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>S10004</td>
+      <td>Jessica Shah</td>
+      <td>1999-08-09</td>
+      <td>Female</td>
+      <td>billytaylor@gmail.com</td>
+      <td>943-200-5504x485</td>
+      <td>2023</td>
+      <td>D4</td>
+    </tr>
+  </tbody>
+</table><h4>Info:</h4><pre><class 'pandas.core.frame.DataFrame'>
+RangeIndex: 10000 entries, 0 to 9999
+Data columns (total 8 columns):
+ #   Column           Non-Null Count  Dtype 
+---  ------           --------------  ----- 
+ 0   student_id       10000 non-null  object
+ 1   name             10000 non-null  object
+ 2   dob              10000 non-null  object
+ 3   gender           10000 non-null  object
+ 4   email            10000 non-null  object
+ 5   phone            10000 non-null  object
+ 6   enrollment_year  10000 non-null  int64 
+ 7   department_id    10000 non-null  object
+dtypes: int64(1), object(7)
+memory usage: 625.1+ KB
+</pre><h4>Gender Value Counts:</h4><table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>count</th>
+    </tr>
+    <tr>
+      <th>gender</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Other</th>
+      <td>3419</td>
+    </tr>
+    <tr>
+      <th>Female</th>
+      <td>3334</td>
+    </tr>
+    <tr>
+      <th>Male</th>
+      <td>3247</td>
+    </tr>
+  </tbody>
+</table><h3>DataFrame: departments</h3><h4>Head:</h4><table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>department_id</th>
+      <th>department_name</th>
+      <th>hod</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>D1</td>
+      <td>Benchmark Bricks-And-Clicks Niches</td>
+      <td>Samuel Fields</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>D2</td>
+      <td>E-Enable Vertical Communities</td>
+      <td>James Valentine</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>D3</td>
+      <td>Transition Global Initiatives</td>
+      <td>Alexis Stephens</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>D4</td>
+      <td>Empower Bricks-And-Clicks Portals</td>
+      <td>Jeffrey Parker</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>D5</td>
+      <td>Incentivize Strategic E-Services</td>
+      <td>Debbie Barron</td>
+    </tr>
+  </tbody>
+</table><h4>Info:</h4><pre><class 'pandas.core.frame.DataFrame'>
+RangeIndex: 20 entries, 0 to 19
+Data columns (total 3 columns):
+ #   Column           Non-Null Count  Dtype 
+---  ------           --------------  ----- 
+ 0   department_id    20 non-null     object
+ 1   department_name  20 non-null     object
+ 2   hod              20 non-null     object
+dtypes: object(3)
+memory usage: 612.0+ bytes
+</pre><h3>DataFrame: faculty</h3><h4>Head:</h4><table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>faculty_id</th>
+      <th>name</th>
+      <th>designation</th>
+      <th>department_id</th>
+      <th>hire_date</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>F1</td>
+      <td>Thomas Shaw</td>
+      <td>Assistant Professor</td>
+      <td>D5</td>
+      <td>2019-11-19</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>F2</td>
+      <td>Jody West</td>
+      <td>Associate Professor</td>
+      <td>D6</td>
+      <td>2013-07-23</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>F3</td>
+      <td>James Perry</td>
+      <td>Assistant Professor</td>
+      <td>D9</td>
+      <td>2022-09-12</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>F4</td>
+      <td>Nicholas Park</td>
+      <td>Lecturer</td>
+      <td>D10</td>
+      <td>2012-12-30</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>F5</td>
+      <td>Lisa Freeman</td>
+      <td>Lecturer</td>
+      <td>D9</td>
+      <td>2015-09-08</td>
+    </tr>
+  </tbody>
+</table><h4>Info:</h4><pre><class 'pandas.core.frame.DataFrame'>
+RangeIndex: 500 entries, 0 to 499
+Data columns (total 5 columns):
+ #   Column         Non-Null Count  Dtype 
+---  ------         --------------  ----- 
+ 0   faculty_id     500 non-null    object
+ 1   name           500 non-null    object
+ 2   designation    500 non-null    object
+ 3   department_id  500 non-null    object
+ 4   hire_date      500 non-null    object
+dtypes: object(5)
+memory usage: 19.7+ KB
+</pre><h3>DataFrame: courses</h3><h4>Head:</h4><table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>course_id</th>
+      <th>course_name</th>
+      <th>credits</th>
+      <th>department_id</th>
+      <th>faculty_id</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>C1</td>
+      <td>Progressive systemic core</td>
+      <td>4</td>
+      <td>D19</td>
+      <td>F435</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>C2</td>
+      <td>Streamlined multimedia access</td>
+      <td>5</td>
+      <td>D4</td>
+      <td>F160</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>C3</td>
+      <td>Reactive real-time application</td>
+      <td>5</td>
+      <td>D7</td>
+      <td>F336</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>C4</td>
+      <td>Re-contextualized 4thgeneration architecture</td>
+      <td>4</td>
+      <td>D8</td>
+      <td>F461</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>C5</td>
+      <td>Advanced static customer loyalty</td>
+      <td>5</td>
+      <td>D6</td>
+      <td>F473</td>
+    </tr>
+  </tbody>
+</table><h4>Info:</h4><pre><class 'pandas.core.frame.DataFrame'>
+RangeIndex: 300 entries, 0 to 299
+Data columns (total 5 columns):
+ #   Column         Non-Null Count  Dtype 
+---  ------         --------------  ----- 
+ 0   course_id      300 non-null    object
+ 1   course_name    300 non-null    object
+ 2   credits        300 non-null    int64 
+ 3   department_id  300 non-null    object
+ 4   faculty_id     300 non-null    object
+dtypes: int64(1), object(4)
+memory usage: 11.8+ KB
+</pre><h3>DataFrame: enrollments</h3><h4>Head:</h4><table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>enrollment_id</th>
+      <th>student_id</th>
+      <th>course_id</th>
+      <th>semester</th>
+      <th>enrollment_date</th>
+      <th>status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>E70000</td>
+      <td>S16194</td>
+      <td>C192</td>
+      <td>Spring</td>
+      <td>2024-09-21</td>
+      <td>Completed</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>E70001</td>
+      <td>S18343</td>
+      <td>C113</td>
+      <td>Spring</td>
+      <td>2025-05-11</td>
+      <td>Completed</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>E70002</td>
+      <td>S16897</td>
+      <td>C128</td>
+      <td>Fall</td>
+      <td>2023-11-07</td>
+      <td>Completed</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>E70003</td>
+      <td>S12949</td>
+      <td>C72</td>
+      <td>Spring</td>
+      <td>2024-08-13</td>
+      <td>Dropped</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>E70004</td>
+      <td>S14270</td>
+      <td>C184</td>
+      <td>Fall</td>
+      <td>2023-12-29</td>
+      <td>Dropped</td>
+    </tr>
+  </tbody>
+</table><h4>Info:</h4><pre><class 'pandas.core.frame.DataFrame'>
+RangeIndex: 40000 entries, 0 to 39999
+Data columns (total 6 columns):
+ #   Column           Non-Null Count  Dtype 
+---  ------           --------------  ----- 
+ 0   enrollment_id    40000 non-null  object
+ 1   student_id       40000 non-null  object
+ 2   course_id        40000 non-null  object
+ 3   semester         40000 non-null  object
+ 4   enrollment_date  40000 non-null  object
+ 5   status           40000 non-null  object
+dtypes: object(6)
+memory usage: 1.8+ MB
+</pre><h3>DataFrame: attendance</h3><h4>Head:</h4><table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>attendance_id</th>
+      <th>student_id</th>
+      <th>course_id</th>
+      <th>attendance_date</th>
+      <th>status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>A1</td>
+      <td>S15285</td>
+      <td>C254</td>
+      <td>2025-01-11</td>
+      <td>Present</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>A2</td>
+      <td>S10349</td>
+      <td>C263</td>
+      <td>2025-05-10</td>
+      <td>Present</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>A3</td>
+      <td>S10329</td>
+      <td>C201</td>
+      <td>2024-10-03</td>
+      <td>Absent</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>A4</td>
+      <td>S17521</td>
+      <td>C239</td>
+      <td>2025-07-30</td>
+      <td>Present</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>A5</td>
+      <td>S17529</td>
+      <td>C118</td>
+      <td>2025-02-09</td>
+      <td>Absent</td>
+    </tr>
+  </tbody>
+</table><h4>Info:</h4><pre><class 'pandas.core.frame.DataFrame'>
+RangeIndex: 30000 entries, 0 to 29999
+Data columns (total 5 columns):
+ #   Column           Non-Null Count  Dtype 
+---  ------           --------------  ----- 
+ 0   attendance_id    30000 non-null  object
+ 1   student_id       30000 non-null  object
+ 2   course_id        30000 non-null  object
+ 3   attendance_date  30000 non-null  object
+ 4   status           30000 non-null  object
+dtypes: object(5)
+memory usage: 1.1+ MB
+</pre><h3>DataFrame: grades</h3><h4>Head:</h4><table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>grade_id</th>
+      <th>student_id</th>
+      <th>course_id</th>
+      <th>semester</th>
+      <th>grade</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>G1</td>
+      <td>S12404</td>
+      <td>C127</td>
+      <td>Spring</td>
+      <td>A</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>G2</td>
+      <td>S19663</td>
+      <td>C264</td>
+      <td>Fall</td>
+      <td>D</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>G3</td>
+      <td>S12428</td>
+      <td>C112</td>
+      <td>Summer</td>
+      <td>F</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>G4</td>
+      <td>S13244</td>
+      <td>C260</td>
+      <td>Summer</td>
+      <td>C</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>G5</td>
+      <td>S11852</td>
+      <td>C215</td>
+      <td>Summer</td>
+      <td>D</td>
+    </tr>
+  </tbody>
+</table><h4>Info:</h4><pre><class 'pandas.core.frame.DataFrame'>
+RangeIndex: 35000 entries, 0 to 34999
+Data columns (total 5 columns):
+ #   Column      Non-Null Count  Dtype 
+---  ------      --------------  ----- 
+ 0   grade_id    35000 non-null  object
+ 1   student_id  35000 non-null  object
+ 2   course_id   35000 non-null  object
+ 3   semester    35000 non-null  object
+ 4   grade       35000 non-null  object
+dtypes: object(5)
+memory usage: 1.3+ MB
+</pre><h4>Grade Value Counts:</h4><table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>count</th>
+    </tr>
+    <tr>
+      <th>grade</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>C</th>
+      <td>7193</td>
+    </tr>
+    <tr>
+      <th>A</th>
+      <td>7081</td>
+    </tr>
+    <tr>
+      <th>B</th>
+      <td>6937</td>
+    </tr>
+    <tr>
+      <th>F</th>
+      <td>6931</td>
+    </tr>
+    <tr>
+      <th>D</th>
+      <td>6858</td>
+    </tr>
+  </tbody>
+</table><h2>Integrity Report</h2><p>No reference integrity issues found.</p></body></html>
